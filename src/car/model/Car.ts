@@ -1,8 +1,9 @@
 import {
-  Column, JoinColumn, ManyToOne, PrimaryColumn
+  Column, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryColumn
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 import { Category } from "../../category/model/Category";
+import { Specification } from "../../specifications/model/Specification";
 
 class Car {
   @PrimaryColumn()
@@ -35,6 +36,14 @@ class Car {
   @ManyToOne(() => Category)
   @JoinColumn({ name: "category_id" })
   category: Category;
+
+  @ManyToMany(() => Specification)
+  @JoinTable({
+    name: "cars_specifications",
+    joinColumn: { name: "car_id" },
+    inverseJoinColumn: { name: "specification_id" },
+  })
+  specifications: Specification[];
 
   constructor() {
     if (!this.id) {
